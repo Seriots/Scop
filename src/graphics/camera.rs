@@ -38,4 +38,17 @@ impl Camera {
     pub fn move_down(&mut self) {
         self.position[1] -= 0.04;
     }
+
+    pub fn rotate_from_vector3(&mut self, vector: (f32, f32, f32), speed: f32) { 
+        // self.direction[0] += vector.0.sin() * speed;
+        // self.direction[2] += vector.0.cos() * speed;
+        // println!("direction = {:?}", self.direction);
+    }
+
+    pub fn move_from_vector3(&mut self, vector: (f32, f32, f32), speed: f32) {
+        self.position[0] += vector.0 * speed;
+        self.position[1] += vector.1 * speed;
+        self.position[2] += vector.2 * speed;
+    }
+
 }
