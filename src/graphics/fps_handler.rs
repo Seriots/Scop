@@ -1,6 +1,6 @@
-use std::time::Instant;
+#![allow(dead_code)]
 
-use glium::glutin::api::egl::display;
+use std::time::Instant;
 
 
 pub struct FpsHandler {

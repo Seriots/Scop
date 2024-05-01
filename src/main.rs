@@ -7,12 +7,12 @@ mod parser;
 mod data;
 mod graphics;
 
-use std::time::Instant;
 
 use crate::window::WindowHandler;
 use parser::*;
 use data::*;
 use graphics::*;
+use winit::keyboard::{KeyCode, PhysicalKey};
 
 fn main() {
     
@@ -32,11 +32,22 @@ fn main() {
                 },
                 winit::event::WindowEvent::RedrawRequested => {
                     drawing_object.draw(&window_handler.display, &obj, &data);
-                    //fps_handler.display_fps();
+                    fps_handler.display_fps();
                 },
                 winit::event::WindowEvent::Resized(window_size) => {
                     window_handler.display.resize(window_size.into());
                 }
+                winit::event::WindowEvent::KeyboardInput{ event, .. } => {
+                    match event.physical_key {
+                        PhysicalKey::Code(KeyCode::KeyW) => data.camera.move_forward(),
+                        PhysicalKey::Code(KeyCode::KeyS) => data.camera.move_backward(),
+                        PhysicalKey::Code(KeyCode::KeyA) => data.camera.move_left(),
+                        PhysicalKey::Code(KeyCode::KeyD) => data.camera.move_right(),
+                        
+                        _ =>  println!("Physical key = {:?}", event.physical_key),
+                    }
+                    println!("Physical key = {:?}", event.physical_key);                    
+                },
                 _ => (),
             },
             winit::event::Event::AboutToWait => {

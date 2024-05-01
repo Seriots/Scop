@@ -99,12 +99,12 @@ impl Drawing {
 
         let program = glium::Program::from_source(display, &vertex_shader_src, &fragment_shader_src, None).unwrap();
 
-        let view = self.view_matrix(&[2.0, 1.0, 1.0], &[-2.0, -1.0, 1.0], &[0.0, 1.0, 0.0]);
+        let view = self.view_matrix(&data.camera.position, &data.camera.direction, &data.camera.up);
         let model = [
             [0.01, 0.0, 0.0, 0.0],
             [0.0, 0.01, 0.0, 0.0],
             [0.0, 0.0, 0.01, 0.0],
-            [0.0, 0.0, 2.0, 1.0f32],
+            [0.0, 0.0, 0.0, 1.0f32],
         ];
     
         let perspective = {
