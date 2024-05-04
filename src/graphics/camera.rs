@@ -1,7 +1,9 @@
 #![allow(dead_code)]
 
 
-use crate::matrix::{core::Vector, linear_combination};
+use std::{cmp::max_by, vec};
+
+use crate::matrix::{core::Vector, linear_combination, maxf, Matrix};
 
 pub struct Camera {
     pub position: Vector<f32>,
@@ -16,24 +18,26 @@ impl Camera {
             position: Vector::from(&[0.0, 0.0, -2.0f32]),
             direction: Vector::from(&[0.0, 0.0, 1.0]), 
             up: Vector::from(&[0.0, 1.0, 0.0]), 
-            rotation: Vector::from(&[0.0, 90.0, 0.0])
+            rotation: Vector::from(&[0.0, 0.0, 90.0])
         }
     }
 
     pub fn move_forward(&mut self) {
-        self.position[2] += 0.04;
+        self.position = linear_combination(&[self.position.clone(), self.direction.clone()], &[1.0, 0.04]); // self.position = self.position + self.direction * 0.04
     }
 
     pub fn move_backward(&mut self) {
-        self.position[2] -= 0.04;
+        self.position = linear_combination(&[self.position.clone(), self.direction.clone()], &[1.0, -0.04]); // self.position = self.position - self.direction * 0.04
     }
 
     pub fn move_left(&mut self) {
-        self.position[0] -= 0.04;
+        let left = Vector::cross_product(&self.direction, &self.up);
+        self.position =  linear_combination(&[self.position.clone(), left], &[1.0, 0.04]);
     }
 
     pub fn move_right(&mut self) {
-        self.position[0] += 0.04;
+        let right = Vector::cross_product(&self.up, &self.direction);
+        self.position =  linear_combination(&[self.position.clone(), right], &[1.0, 0.04]);
     }
 
     pub fn move_up(&mut self) {
@@ -55,16 +59,26 @@ impl Camera {
         // v1.add(&v2);
         // self.direction = v1;
 
-        // self.direction[0] = self.rotation[0].to_radians().sin();
-        // self.direction[1] = if self.rotation[1].to_radians().cos() < self.rotation[1].to_radians().sin() { self.rotation[1].to_radians().cos() } else { self.rotation[1].to_radians().sin() };     
-        // self.direction[2] = self.rotation[0].to_radians().cos();
-        
+        self.direction[0] = self.rotation[0].to_radians().sin();
+        self.direction[1] = self.rotation[1] / 45.0;     
+        self.direction[2] = self.rotation[0].to_radians().cos();
         self.direction.normalize();
-        println!("{:?}", self.direction);
+        
+        // self.up[1] = self.rotation[2].to_radians().sin();
+        // self.up[0] = self.rotation[2].to_radians().cos();
+        // self.up.normalize();
+        println!("dir = {:?}, rot = {:?}", self.direction, self.rotation);
     }
 
     pub fn move_from_vector3(&mut self, vector: Vector<f32>, speed: f32) {
-        self.position = linear_combination(&[self.position.clone(), vector], &[1.0, speed]); // self.position = self.position + vector * speed
+        self.position = linear_combination(&[self.position.clone(),
+                                             Vector::cross_product(&self.up, &self.direction),
+                                             self.up.clone(),
+                                             self.direction.clone()],
+                                           &[1.0,
+                                             vector[0] * speed,
+                                             vector[1] * speed,
+                                             vector[2] * speed]); 
     }
 
 }

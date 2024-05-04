@@ -81,6 +81,22 @@ impl<K: Clone + Default + NumberUtils + Fma + AddAssign + DivAssign + SubAssign 
         }
     }
 
+    pub fn add_new(&self, a: K) -> Vector<K> {
+        let mut new = self.clone();
+        for i in 0..new.size() {
+            new[i] += a.clone(); 
+        }
+        new
+    }
+    
+    pub fn scl_new(&self, a: K) -> Vector<K> {
+        let mut new = self.clone();
+        for i in 0..new.size() {
+            new[i] *= a.clone(); 
+        }
+        new
+    }
+
     pub fn dot(&self, v: Self) -> K {
         let mut result: K = K::default();
 

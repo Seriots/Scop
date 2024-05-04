@@ -63,6 +63,18 @@ impl<K: Clone + Default + NumberUtils + Fma> Matrix<K> {
         Self { matrix }
     }
 
+    pub fn from_vector(vectors: &[Vector<K>]) -> Self {
+        let mut new = Vec::new();
+        for vector in vectors {
+            let mut row = Vec::new();
+            for i in 0..vector.size() {
+                row.push(vector[i].clone());
+            }
+            new.push(row)
+        }
+        Self { matrix: new }
+    }
+
     pub fn shape(&self) -> (usize, usize) {
         return (self[0].len(), self.matrix.len())
     }
