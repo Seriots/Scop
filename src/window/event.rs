@@ -64,10 +64,10 @@ impl KeyEventHandler {
 			match movement {
 				Movement::RotateLeft => rotation_vector[0] -= 1.0,
 				Movement::RotateRight => rotation_vector[0] += 1.0,
-				Movement::RotateUp => rotation_vector[2] += 1.0,
-				Movement::RotateDown => rotation_vector[2] -= 1.0,
-				Movement::RotateWest => rotation_vector[1] -= 1.0,
-				Movement::RotateEast => rotation_vector[1] += 1.0,
+				Movement::RotateUp => rotation_vector[1] -= 1.0,
+				Movement::RotateDown => rotation_vector[1] += 1.0,
+				Movement::RotateWest => rotation_vector[2] += 1.0,
+				Movement::RotateEast => rotation_vector[2] -= 1.0,
 				_ => (),
 			}
 		}

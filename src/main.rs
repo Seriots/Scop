@@ -37,7 +37,7 @@ fn main() {
                     let rotation = data.key_event_handler.get_rotation_vector();
                     drawing_object.draw(&window_handler.display, &obj, &data);
                     let fps = fps_handler.display_fps(false);
-                    data.camera.rotate_from_vector3(rotation, 1.0 / fps);
+                    data.camera.rotate_from_vector3(rotation, 1.0 / fps * 200.0);
                     data.camera.move_from_vector3(movement, 1.0 / fps);
                 },
                 winit::event::WindowEvent::Resized(window_size) => {
