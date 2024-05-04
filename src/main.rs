@@ -6,6 +6,7 @@ mod teapot;
 mod parser;
 mod data;
 mod graphics;
+mod matrix;
 
 
 use crate::window::WindowHandler;
@@ -53,7 +54,10 @@ fn main() {
                             PhysicalKey::Code(KeyCode::ShiftLeft) => data.key_event_handler.start_event(window::Movement::Down),
                             PhysicalKey::Code(KeyCode::ArrowLeft) => data.key_event_handler.start_event(window::Movement::RotateLeft),
                             PhysicalKey::Code(KeyCode::ArrowRight) => data.key_event_handler.start_event(window::Movement::RotateRight),
-                            
+                            PhysicalKey::Code(KeyCode::ArrowUp) => data.key_event_handler.start_event(window::Movement::RotateUp),
+                            PhysicalKey::Code(KeyCode::ArrowDown) => data.key_event_handler.start_event(window::Movement::RotateDown),
+                            PhysicalKey::Code(KeyCode::KeyQ) => data.key_event_handler.start_event(window::Movement::RotateEast),
+                            PhysicalKey::Code(KeyCode::KeyE) => data.key_event_handler.start_event(window::Movement::RotateWest),
                             
                             _ =>  println!("Physical key = {:?}", event.physical_key),
                         },
@@ -66,6 +70,10 @@ fn main() {
                             PhysicalKey::Code(KeyCode::ShiftLeft) => data.key_event_handler.stop_event(window::Movement::Down),
                             PhysicalKey::Code(KeyCode::ArrowLeft) => data.key_event_handler.stop_event(window::Movement::RotateLeft),
                             PhysicalKey::Code(KeyCode::ArrowRight) => data.key_event_handler.stop_event(window::Movement::RotateRight),
+                            PhysicalKey::Code(KeyCode::ArrowUp) => data.key_event_handler.stop_event(window::Movement::RotateUp),
+                            PhysicalKey::Code(KeyCode::ArrowDown) => data.key_event_handler.stop_event(window::Movement::RotateDown),
+                            PhysicalKey::Code(KeyCode::KeyQ) => data.key_event_handler.stop_event(window::Movement::RotateEast),
+                            PhysicalKey::Code(KeyCode::KeyE) => data.key_event_handler.stop_event(window::Movement::RotateWest),
                             
                             _ =>  println!("Physical key = {:?}", event.physical_key),
                         },

@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 use glium::{glutin::surface::WindowSurface, uniform, Display, Surface};
 
-use crate::{Data, Object};
+use crate::{matrix::Vector, Data, Object};
 
 pub struct Drawing {
     pub t: f32,
@@ -13,7 +13,7 @@ impl Drawing {
         Self {t: 0.0}
     }
 
-    pub fn view_matrix(&self, position: &[f32; 3], direction: &[f32; 3], up: &[f32; 3]) -> [[f32; 4]; 4] {
+    pub fn view_matrix(&self, position: &Vector<f32>, direction: &Vector<f32>, up: &Vector<f32>) -> [[f32; 4]; 4] {
         let f = {
             let f = direction;
             let len = f[0] * f[0] + f[1] * f[1] + f[2] * f[2];

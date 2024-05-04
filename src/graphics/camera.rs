@@ -1,17 +1,22 @@
 #![allow(dead_code)]
 
+
+use crate::matrix::{core::Vector, linear_combination};
+
 pub struct Camera {
-    pub position: [f32; 3],
-    pub direction: [f32; 3],
-    pub up: [f32; 3],
+    pub position: Vector<f32>,
+    pub direction: Vector<f32>,
+    pub up: Vector<f32>,
+    pub rotation: Vector<f32>
 }
 
 impl Camera {
     pub fn new() -> Self {
         Self {
-            position: [0.0, 0.0, -2.0f32],
-            direction: [0.0, 0.0, 1.0], 
-            up: [0.0, 1.0, 0.0], 
+            position: Vector::from(&[0.0, 0.0, -2.0f32]),
+            direction: Vector::from(&[0.0, 0.0, 1.0]), 
+            up: Vector::from(&[0.0, 1.0, 0.0]), 
+            rotation: Vector::from(&[0.0, 0.0, 0.0])
         }
     }
 
@@ -39,16 +44,17 @@ impl Camera {
         self.position[1] -= 0.04;
     }
 
-    pub fn rotate_from_vector3(&mut self, vector: (f32, f32, f32), speed: f32) { 
-        // self.direction[0] += vector.0.sin() * speed;
-        // self.direction[2] += vector.0.cos() * speed;
-        // println!("direction = {:?}", self.direction);
+    pub fn rotate_from_vector3(&mut self, vector: Vector<f32>, speed: f32) {
+        self.rotation = linear_combination(&[self.rotation.clone(), vector], &[1.0, speed * 10.0]); // self.rotation = self.rotation + vector * speed
+        self.direction[0] = self.rotation[0].sin();
+        self.direction[1] = self.rotation[2].sin();
+        self.direction[2] = self.rotation[0].cos() + self.rotation[2].cos();
+        self.direction.normalize();
+        println!("{:?}", self.direction);
     }
 
-    pub fn move_from_vector3(&mut self, vector: (f32, f32, f32), speed: f32) {
-        self.position[0] += vector.0 * speed;
-        self.position[1] += vector.1 * speed;
-        self.position[2] += vector.2 * speed;
+    pub fn move_from_vector3(&mut self, vector: Vector<f32>, speed: f32) {
+        self.position = linear_combination(&[self.position.clone(), vector], &[1.0, speed]); // self.position = self.position + vector * speed
     }
 
 }
