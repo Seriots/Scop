@@ -1,1 +1,5 @@
 [ ] Parser .obj
+[ ] Handle color of each triangle
+[ ] Handle texture
+[ ] Handle smooth transition
+
