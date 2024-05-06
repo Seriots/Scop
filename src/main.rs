@@ -17,15 +17,19 @@ use winit::keyboard::{KeyCode, PhysicalKey};
 
 fn main() {
     
-    let mut data = Data::new();
-    let window_handler = WindowHandler::new("Test", (720, 720));
+    let event_loop = winit::event_loop::EventLoopBuilder::new()
+    .build()
+    .expect("event loop building");
+    let window_handler = WindowHandler::new("Test", (720, 720), &event_loop);
 
+    let mut data = Data::new((window_handler.window.inner_size().width as f32, window_handler.window.inner_size().height as f32));
+    
     let obj = Object::new(teapot::VERTICES.to_vec(), teapot::NORMALS.to_vec(), teapot::INDICES.to_vec());
     let drawing_object = Drawing::new();
 
     let mut fps_handler = FpsHandler::from_instant(data.start_time);
 
-    window_handler.event_loop.run(move |ev, window_target| {
+    event_loop.run(move |ev, window_target| {
         match ev {
             winit::event::Event::WindowEvent { event, .. } => match event {
                 winit::event::WindowEvent::CloseRequested => {
@@ -42,6 +46,7 @@ fn main() {
                 },
                 winit::event::WindowEvent::Resized(window_size) => {
                     window_handler.display.resize(window_size.into());
+                    data.window_extent = (window_size.width as f32, window_size.height as f32);
                 }
                 winit::event::WindowEvent::KeyboardInput{ event, .. } => {
                     match event.state {
@@ -58,8 +63,9 @@ fn main() {
                             PhysicalKey::Code(KeyCode::ArrowDown) => data.key_event_handler.start_event(window::Movement::RotateDown),
                             PhysicalKey::Code(KeyCode::KeyQ) => data.key_event_handler.start_event(window::Movement::RotateEast),
                             PhysicalKey::Code(KeyCode::KeyE) => data.key_event_handler.start_event(window::Movement::RotateWest),
+                            PhysicalKey::Code(KeyCode::Escape) => window_handler.unlock_cursor(&mut data),
                             
-                            _ =>  println!("Physical key = {:?}", event.physical_key),
+                            _ =>  (),
                         },
                         winit::event::ElementState::Released => match event.physical_key {
                             PhysicalKey::Code(KeyCode::KeyW) => data.key_event_handler.stop_event(window::Movement::Forward),
@@ -75,11 +81,28 @@ fn main() {
                             PhysicalKey::Code(KeyCode::KeyQ) => data.key_event_handler.stop_event(window::Movement::RotateEast),
                             PhysicalKey::Code(KeyCode::KeyE) => data.key_event_handler.stop_event(window::Movement::RotateWest),
                             
-                            _ =>  println!("Physical key = {:?}", event.physical_key),
+                            _ =>  (),
                         },
                     }
-                    
                 },
+                winit::event::WindowEvent::CursorMoved {position, ..} =>  {
+                    if data.window_active {
+                        data.key_event_handler.mouse_moved(position, &data.window_extent, &mut data.camera);
+                        window_handler.center_cursor(&mut data);
+                    }
+                },
+                winit::event::WindowEvent::MouseInput { state, button, .. } => {
+                    match state {
+                        winit::event::ElementState::Pressed => match button {
+                            winit::event::MouseButton::Left => {
+                                window_handler.lock_cursor(&mut data);
+                            },
+
+                            _ => (),
+                            },
+                        _ => {},
+                    }
+                }
                 _ => (),
             },
             winit::event::Event::AboutToWait => {

@@ -1,4 +1,6 @@
-use crate::matrix::Vector;
+use winit::dpi::PhysicalPosition;
+
+use crate::{matrix::Vector, Camera};
 
 
 #[derive(PartialEq)]
@@ -38,6 +40,7 @@ impl KeyEventHandler {
 		}
 	}
 
+	#[allow(dead_code)]
 	pub fn is_moving(&self) -> bool {
 		!self.movement.is_empty()
 	}
@@ -72,5 +75,12 @@ impl KeyEventHandler {
 			}
 		}
 		rotation_vector
+	}
+
+	pub fn mouse_moved(&self, position: PhysicalPosition<f64>, window_extent: &(f32, f32), camera: &mut Camera) {
+		let x = position.x as f32 - window_extent.0 / 2.0;
+		let y = position.y as f32 - window_extent.1 / 2.0;
+
+		camera.rotate_from_vector3(Vector::from(&[x, -y, 0.0]), 0.1);
 	}
 }

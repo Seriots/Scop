@@ -20,21 +20,28 @@ impl Camera {
         }
     }
 
+    pub fn project_direction_2d(&self) -> Vector<f32> {
+        let mut direction = self.direction.clone();
+        direction[1] = 0.0;
+        direction.normalize();
+        direction
+    }
+
     pub fn move_forward(&mut self) {
-        self.position = linear_combination(&[self.position.clone(), self.direction.clone()], &[1.0, 0.04]); // self.position = self.position + self.direction * 0.04
+        self.position = linear_combination(&[self.position.clone(), self.project_direction_2d()], &[1.0, 0.04]); // self.position = self.position + self.direction * 0.04
     }
 
     pub fn move_backward(&mut self) {
-        self.position = linear_combination(&[self.position.clone(), self.direction.clone()], &[1.0, -0.04]); // self.position = self.position - self.direction * 0.04
+        self.position = linear_combination(&[self.position.clone(), self.project_direction_2d()], &[1.0, -0.04]); // self.position = self.position - self.direction * 0.04
     }
 
     pub fn move_left(&mut self) {
-        let left = Vector::cross_product(&self.direction, &self.up);
+        let left = Vector::cross_product(&self.project_direction_2d(), &self.up);
         self.position =  linear_combination(&[self.position.clone(), left], &[1.0, 0.04]);
     }
 
     pub fn move_right(&mut self) {
-        let right = Vector::cross_product(&self.up, &self.direction);
+        let right = Vector::cross_product(&self.up, &self.project_direction_2d());
         self.position =  linear_combination(&[self.position.clone(), right], &[1.0, 0.04]);
     }
 
@@ -53,6 +60,7 @@ impl Camera {
 
         self.rotation.add(&rotation);
         self.rotation[1] = self.rotation[1].clamp(-89.9, 89.9);
+        self.rotation[0] = self.rotation[0].rem_euclid(360.0);
 
         //rotate around y axis
         let p = Quaternion::from_vec(&Vector::from(&[0.0, 0.0, 1.0]));
@@ -81,10 +89,11 @@ impl Camera {
     }
 
     pub fn move_from_vector3(&mut self, vector: Vector<f32>, speed: f32) {
+        let direction2d = self.project_direction_2d(); 
         self.position = linear_combination(&[self.position.clone(),
-                                             Vector::cross_product(&self.up, &self.direction),
+                                             Vector::cross_product(&self.up, &direction2d),
                                              self.up.clone(),
-                                             self.direction.clone()],
+                                             direction2d],
                                            &[1.0,
                                              vector[0] * speed,
                                              vector[1] * speed,
