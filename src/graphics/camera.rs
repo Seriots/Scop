@@ -27,32 +27,6 @@ impl Camera {
         direction
     }
 
-    pub fn move_forward(&mut self) {
-        self.position = linear_combination(&[self.position.clone(), self.project_direction_2d()], &[1.0, 0.04]); // self.position = self.position + self.direction * 0.04
-    }
-
-    pub fn move_backward(&mut self) {
-        self.position = linear_combination(&[self.position.clone(), self.project_direction_2d()], &[1.0, -0.04]); // self.position = self.position - self.direction * 0.04
-    }
-
-    pub fn move_left(&mut self) {
-        let left = Vector::cross_product(&self.project_direction_2d(), &self.up);
-        self.position =  linear_combination(&[self.position.clone(), left], &[1.0, 0.04]);
-    }
-
-    pub fn move_right(&mut self) {
-        let right = Vector::cross_product(&self.up, &self.project_direction_2d());
-        self.position =  linear_combination(&[self.position.clone(), right], &[1.0, 0.04]);
-    }
-
-    pub fn move_up(&mut self) {
-        self.position[1] += 0.04;
-    }
-
-    pub fn move_down(&mut self) {
-        self.position[1] -= 0.04;
-    }
-
     pub fn rotate_from_vector3(&mut self, vector: Vector<f32>, speed: f32) {
 
         let mut rotation = vector.clone();

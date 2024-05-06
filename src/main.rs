@@ -25,7 +25,8 @@ fn main() {
     let mut data = Data::new((window_handler.window.inner_size().width as f32, window_handler.window.inner_size().height as f32));
     
     let obj = Object::new(teapot::VERTICES.to_vec(), teapot::NORMALS.to_vec(), teapot::INDICES.to_vec());
-    let drawing_object = Drawing::new();
+    let mut drawing_object = Drawing::new();
+    drawing_object.compute_program(&window_handler.display, &String::from("src/shaders/shader.vert"), &String::from("src/shaders/shader.frag"));
 
     let mut fps_handler = FpsHandler::from_instant(data.start_time);
 
@@ -39,10 +40,10 @@ fn main() {
 
                     let movement = data.key_event_handler.get_movement_vector();
                     let rotation = data.key_event_handler.get_rotation_vector();
-                    drawing_object.draw(&window_handler.display, &obj, &data);
                     let fps = fps_handler.display_fps(false);
                     data.camera.rotate_from_vector3(rotation, 1.0 / fps * 200.0);
                     data.camera.move_from_vector3(movement, 1.0 / fps);
+                    drawing_object.draw(&window_handler.display, &obj, &data, &fps_handler.delta_time);
                 },
                 winit::event::WindowEvent::Resized(window_size) => {
                     window_handler.display.resize(window_size.into());

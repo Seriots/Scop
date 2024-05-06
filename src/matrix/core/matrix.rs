@@ -91,6 +91,19 @@ impl<K: Clone + Default + NumberUtils + Fma> Matrix<K> {
         }
         return Vector::from_vec(vector);
     }
+
+    pub fn to_list_4(&self) -> [[K; 4]; 4] {
+        if self.shape() != (4, 4) {
+            panic!("The matrix must be a 4x4 matrix")
+        }
+        
+        [
+            [self[0][0].clone(), self[0][1].clone(), self[0][2].clone(), self[0][3].clone()],
+            [self[1][0].clone(), self[1][1].clone(), self[1][2].clone(), self[1][3].clone()],
+            [self[2][0].clone(), self[2][1].clone(), self[2][2].clone(), self[2][3].clone()],
+            [self[3][0].clone(), self[3][1].clone(), self[3][2].clone(), self[3][3].clone()],
+        ]
+    }
 }
 
 impl<K: Debug + Display + NumberUtils + Clone + Default + Fma + AddAssign + Add<Output = K> + SubAssign + Sub<Output = K> + MulAssign + DivAssign + Mul<Output = K> + Div<Output = K> + Neg<Output = K> + PartialEq> Matrix<K> {
@@ -448,6 +461,15 @@ impl<K> Index<(Range<usize>, Range<usize>)> for Matrix<K> {
 impl<K> IndexMut<(Range<usize>, Range<usize>)> for Matrix<K> {
     fn index_mut(&mut self, range: (Range<usize>, Range<usize>)) -> &mut Self::Output {
         &mut self.matrix[range.0][range.1]
+    }
+}
+
+
+impl Mul for Matrix<f32> {
+    type Output = Matrix<f32>;
+
+    fn mul(self, v: Self) -> Self::Output {
+        return self.mul_mat(&v);
     }
 }
 

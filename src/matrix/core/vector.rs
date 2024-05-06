@@ -152,6 +152,15 @@ impl<K: Clone + Default + NumberUtils + Fma + AddAssign + DivAssign + SubAssign 
         }
     }
 
+    pub fn rnormalize(&self) -> Self {
+        let mut new = self.clone();
+        let norm = new.norm();
+        for i in 0..new.size() {
+            new[i] /= norm.clone();
+        }
+        new 
+    }
+
     pub fn angle_cos(u: &Vector<K>, v: &Vector<K>) -> K
     {
         let dot: K = u.clone().dot(v.clone());
