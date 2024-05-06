@@ -79,7 +79,6 @@ fn main() {
                         },
                     }
                     
-                    println!("Physical key = {:?}", event.physical_key);                    
                 },
                 _ => (),
             },

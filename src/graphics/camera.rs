@@ -1,15 +1,13 @@
 #![allow(dead_code)]
 
 
-use std::{cmp::max_by, vec};
-
-use crate::matrix::{core::Vector, linear_combination, maxf, Matrix};
+use crate::{matrix::{core::Vector, linear_combination}, Quaternion};
 
 pub struct Camera {
     pub position: Vector<f32>,
     pub direction: Vector<f32>,
     pub up: Vector<f32>,
-    pub rotation: Vector<f32>
+    pub rotation: Vector<f32>,
 }
 
 impl Camera {
@@ -17,8 +15,8 @@ impl Camera {
         Self {
             position: Vector::from(&[0.0, 0.0, -2.0f32]),
             direction: Vector::from(&[0.0, 0.0, 1.0]), 
-            up: Vector::from(&[0.0, 1.0, 0.0]), 
-            rotation: Vector::from(&[0.0, 0.0, 90.0])
+            up: Vector::from(&[0.0, 1.0, 0.0]),
+            rotation: Vector::from(&[0.0, 0.0, 90.0]),
         }
     }
 
@@ -49,25 +47,37 @@ impl Camera {
     }
 
     pub fn rotate_from_vector3(&mut self, vector: Vector<f32>, speed: f32) {
-        self.rotation = linear_combination(&[self.rotation.clone(), vector], &[1.0, speed]); // self.rotation = self.rotation + vector * speed
-        self.rotation[1] = self.rotation[1].clamp(-180.0, 180.0);
-        self.rotation[0] = self.rotation[0].rem_euclid(360.0);
 
-        // let mut v1 = Vector::from(&[self.rotation[0].sin(), 1.0, self.rotation[0].cos()]);
-        // let v2 = Vector::from(&[self.rotation[1].cos(), self.rotation[1].sin(), 0.0]);
+        let mut rotation = vector.clone();
+        rotation.scl(speed);
 
-        // v1.add(&v2);
-        // self.direction = v1;
+        self.rotation.add(&rotation);
+        self.rotation[1] = self.rotation[1].clamp(-89.9, 89.9);
 
-        self.direction[0] = self.rotation[0].to_radians().sin();
-        self.direction[1] = self.rotation[1] / 45.0;     
-        self.direction[2] = self.rotation[0].to_radians().cos();
-        self.direction.normalize();
+        //rotate around y axis
+        let p = Quaternion::from_vec(&Vector::from(&[0.0, 0.0, 1.0]));
         
-        // self.up[1] = self.rotation[2].to_radians().sin();
-        // self.up[0] = self.rotation[2].to_radians().cos();
-        // self.up.normalize();
-        println!("dir = {:?}, rot = {:?}", self.direction, self.rotation);
+        let mut q = Quaternion::from_angle(self.rotation[0].to_radians(), Vector::from(&[0.0, 1.0, 0.0]));
+        q.normalize();
+        let q_inv = q.inverse();
+
+        let p_rot = q * p * q_inv;
+
+        self.direction = Vector::from(&[p_rot.x, p_rot.y, p_rot.z]);
+        
+        //rotate around x axis
+        let p = Quaternion::from_vec(&self.direction);
+        let mut u = Vector::cross_product(&self.direction, &self.up);
+        u.normalize();
+        
+        let mut q = Quaternion::from_angle(self.rotation[1].to_radians(), u);
+        q.normalize();
+        let q_inv = q.inverse();
+        
+        let p_rot = q * p * q_inv;
+        
+        self.direction = Vector::from(&[p_rot.x, p_rot.y, p_rot.z]);
+        
     }
 
     pub fn move_from_vector3(&mut self, vector: Vector<f32>, speed: f32) {
