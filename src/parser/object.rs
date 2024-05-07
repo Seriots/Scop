@@ -7,10 +7,11 @@ use crate::Material;
 
 #[derive(Copy, Clone)]
 pub struct Vertex {
-    pub position: (f32, f32, f32)
+    pub position: (f32, f32, f32),
+    pub color: (f32, f32, f32)
 }
 
-implement_vertex!(Vertex, position);
+implement_vertex!(Vertex, position, color);
 
 #[derive(Copy, Clone)]
 pub struct Normal {
@@ -28,11 +29,21 @@ pub struct Object {
     pub material_path: String,
     pub materials: Vec<Material>,
     pub link_material: Vec<String>,
+    pub color: Vec<Vertex>,
 }
 
 impl Object {
     pub fn new(vertices: Vec<Vertex>, normals: Vec<Normal>, indices: Vec<u16>) -> Self {
-        Self {name: String::default(), vertices, normals, indices, material_path: String::default(), materials: Default::default(), link_material: Default::default()}
+        Self {
+                name: String::default(),
+                vertices,
+                normals,
+                indices,
+                material_path: String::default(),
+                materials: Default::default(),
+                link_material: Default::default(),
+                color: Default::default()
+            }
     }
 
     fn parse_vertex(&mut self, line: &str) {
@@ -41,7 +52,8 @@ impl Object {
         let x = iter.next().unwrap().parse::<f32>().unwrap();
         let y = iter.next().unwrap().parse::<f32>().unwrap();
         let z = iter.next().unwrap().parse::<f32>().unwrap();
-        self.vertices.push(Vertex { position: (x, y, z) })
+        let random_value = rand::random::<f32>();
+        self.vertices.push(Vertex { position: (x, y, z), color: (random_value, random_value, random_value)})
     }
 
     fn parse_normal(&mut self, line: &str) {
@@ -63,8 +75,6 @@ impl Object {
             self.indices.push(first - 1);
             self.indices.push(second - 1);
             self.indices.push(third - 1);
-            self.link_material.push(mat_to_use.to_string());
-            self.link_material.push(mat_to_use.to_string());
             self.link_material.push(mat_to_use.to_string());
 
             second = third;

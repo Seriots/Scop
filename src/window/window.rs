@@ -2,7 +2,7 @@ extern crate winit;
 extern crate glium;
 
 use glium::{glutin::surface::WindowSurface, Display};
-use winit::{dpi::LogicalPosition, event_loop::EventLoop, window::Window};
+use winit::{dpi::PhysicalPosition, event_loop::EventLoop, window::Window};
 
 use crate::Data;
 
@@ -48,6 +48,6 @@ impl WindowHandler {
     }
 
     pub fn center_cursor(&self, data: &mut Data) {
-        self.window.set_cursor_position(LogicalPosition::new(data.window_extent.0 / 2.0, data.window_extent.1 / 2.0)).unwrap();
+        self.window.set_cursor_position(PhysicalPosition::new(data.window_extent.0 / 2.0, data.window_extent.1 / 2.0)).unwrap();
     }
 }

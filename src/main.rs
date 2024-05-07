@@ -9,7 +9,7 @@ mod graphics;
 mod matrix;
 
 
-use crate::window::WindowHandler;
+use crate::{matrix::Vector, window::WindowHandler};
 use parser::*;
 use data::*;
 use graphics::*;
@@ -41,11 +41,9 @@ fn main() {
                 winit::event::WindowEvent::RedrawRequested => {
 
                     let movement = data.key_event_handler.get_movement_vector();
-                    let rotation = data.key_event_handler.get_rotation_vector();
-                    data.update_object_position(data.key_event_handler.get_obj_movement_vector(), 0.5);
+                    data.update_object_position(data.key_event_handler.get_obj_movement_vector(), 0.01);
                     let fps = fps_handler.display_fps(false);
-                    data.camera.rotate_from_vector3(rotation, 1.0 / fps * 200.0);
-                    data.camera.move_from_vector3(movement, 4.0 / fps);
+                    data.camera.move_from_vector3(movement, 1.0 / fps);
                     drawing_object.draw(&window_handler.display, &obj, &data, &fps_handler.delta_time);
                 },
                 winit::event::WindowEvent::Resized(window_size) => {

@@ -76,7 +76,7 @@ impl Drawing {
             &[self.t.cos(), 0.0, -self.t.sin(), 0.0],
             &[0.0, 1.0, 0.0, 0.0],
             &[self.t.sin(), 0.0, self.t.cos(), 0.0],
-            &[10.5, 20.0, 0.0, 1.0f32],
+            &[0.0, 0.0, 0.0, 1.0f32],
         ]);
 
         let model = rotation_model * size_model;
@@ -98,11 +98,13 @@ impl Drawing {
                 write: true,
                 .. Default::default()
             },
+            blend: glium::draw_parameters::Blend::alpha_blending(),
             ..Default::default()
         };
 
         let positions = glium::VertexBuffer::new(display, &obj.vertices).unwrap();
         let normals = glium::VertexBuffer::new(display, &obj.normals).unwrap();
+        let colors = glium::VertexBuffer::new(display, &obj.color).unwrap();
         let indices = glium::IndexBuffer::new(
             display,
             glium::index::PrimitiveType::TrianglesList,
@@ -110,7 +112,7 @@ impl Drawing {
         ).unwrap();
     
         frame.draw(
-                (&positions, &normals),
+                (&positions, &normals, &colors),
                 &indices,
                 &self.program.as_ref().unwrap(),
                 &uniform! {model: model.to_list_4(), u_light: light, perspective: perspective.to_list_4(), view: view.to_list_4()},
