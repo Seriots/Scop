@@ -25,7 +25,7 @@ fn main() {
     let mut data = Data::new((window_handler.window.inner_size().width as f32, window_handler.window.inner_size().height as f32));
     
     //let obj = Object::new(teapot::VERTICES.to_vec(), teapot::NORMALS.to_vec(), teapot::INDICES.to_vec());
-    let obj = Object::from_path("resources/teapot2.obj");
+    let obj = Object::from_path("resources/42.obj");
     
     let mut drawing_object = Drawing::new();
     drawing_object.compute_program(&window_handler.display, &String::from("src/shaders/shader.vert"), &String::from("src/shaders/shader.frag"));
@@ -42,9 +42,10 @@ fn main() {
 
                     let movement = data.key_event_handler.get_movement_vector();
                     let rotation = data.key_event_handler.get_rotation_vector();
+                    data.update_object_position(data.key_event_handler.get_obj_movement_vector(), 0.5);
                     let fps = fps_handler.display_fps(false);
                     data.camera.rotate_from_vector3(rotation, 1.0 / fps * 200.0);
-                    data.camera.move_from_vector3(movement, 1.0 / fps);
+                    data.camera.move_from_vector3(movement, 4.0 / fps);
                     drawing_object.draw(&window_handler.display, &obj, &data, &fps_handler.delta_time);
                 },
                 winit::event::WindowEvent::Resized(window_size) => {
@@ -60,12 +61,12 @@ fn main() {
                             PhysicalKey::Code(KeyCode::KeyD) => data.key_event_handler.start_event(window::Movement::Right),
                             PhysicalKey::Code(KeyCode::Space) => data.key_event_handler.start_event(window::Movement::Up),
                             PhysicalKey::Code(KeyCode::ShiftLeft) => data.key_event_handler.start_event(window::Movement::Down),
-                            PhysicalKey::Code(KeyCode::ArrowLeft) => data.key_event_handler.start_event(window::Movement::RotateLeft),
-                            PhysicalKey::Code(KeyCode::ArrowRight) => data.key_event_handler.start_event(window::Movement::RotateRight),
-                            PhysicalKey::Code(KeyCode::ArrowUp) => data.key_event_handler.start_event(window::Movement::RotateUp),
-                            PhysicalKey::Code(KeyCode::ArrowDown) => data.key_event_handler.start_event(window::Movement::RotateDown),
-                            PhysicalKey::Code(KeyCode::KeyQ) => data.key_event_handler.start_event(window::Movement::RotateEast),
-                            PhysicalKey::Code(KeyCode::KeyE) => data.key_event_handler.start_event(window::Movement::RotateWest),
+                            PhysicalKey::Code(KeyCode::ArrowLeft) => data.key_event_handler.start_event(window::Movement::ObjLeft),
+                            PhysicalKey::Code(KeyCode::ArrowRight) => data.key_event_handler.start_event(window::Movement::ObjRight),
+                            PhysicalKey::Code(KeyCode::ArrowUp) => data.key_event_handler.start_event(window::Movement::ObjForward),
+                            PhysicalKey::Code(KeyCode::ArrowDown) => data.key_event_handler.start_event(window::Movement::ObjBackward),
+                            PhysicalKey::Code(KeyCode::ControlRight) => data.key_event_handler.start_event(window::Movement::ObjDown),
+                            PhysicalKey::Code(KeyCode::ShiftRight) => data.key_event_handler.start_event(window::Movement::ObjUp),
                             PhysicalKey::Code(KeyCode::Escape) => window_handler.unlock_cursor(&mut data),
                             
                             _ =>  (),
@@ -77,12 +78,12 @@ fn main() {
                             PhysicalKey::Code(KeyCode::KeyD) => data.key_event_handler.stop_event(window::Movement::Right),
                             PhysicalKey::Code(KeyCode::Space) => data.key_event_handler.stop_event(window::Movement::Up),
                             PhysicalKey::Code(KeyCode::ShiftLeft) => data.key_event_handler.stop_event(window::Movement::Down),
-                            PhysicalKey::Code(KeyCode::ArrowLeft) => data.key_event_handler.stop_event(window::Movement::RotateLeft),
-                            PhysicalKey::Code(KeyCode::ArrowRight) => data.key_event_handler.stop_event(window::Movement::RotateRight),
-                            PhysicalKey::Code(KeyCode::ArrowUp) => data.key_event_handler.stop_event(window::Movement::RotateUp),
-                            PhysicalKey::Code(KeyCode::ArrowDown) => data.key_event_handler.stop_event(window::Movement::RotateDown),
-                            PhysicalKey::Code(KeyCode::KeyQ) => data.key_event_handler.stop_event(window::Movement::RotateEast),
-                            PhysicalKey::Code(KeyCode::KeyE) => data.key_event_handler.stop_event(window::Movement::RotateWest),
+                            PhysicalKey::Code(KeyCode::ArrowLeft) => data.key_event_handler.stop_event(window::Movement::ObjLeft),
+                            PhysicalKey::Code(KeyCode::ArrowRight) => data.key_event_handler.stop_event(window::Movement::ObjRight),
+                            PhysicalKey::Code(KeyCode::ArrowUp) => data.key_event_handler.stop_event(window::Movement::ObjForward),
+                            PhysicalKey::Code(KeyCode::ArrowDown) => data.key_event_handler.stop_event(window::Movement::ObjBackward),
+                            PhysicalKey::Code(KeyCode::ControlRight) => data.key_event_handler.stop_event(window::Movement::ObjDown),
+                            PhysicalKey::Code(KeyCode::ShiftRight) => data.key_event_handler.stop_event(window::Movement::ObjUp),
                             
                             _ =>  (),
                         },

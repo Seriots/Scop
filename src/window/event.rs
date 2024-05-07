@@ -17,6 +17,12 @@ pub enum Movement {
 	RotateDown,
 	RotateWest,
 	RotateEast,
+	ObjForward,
+	ObjBackward,
+	ObjLeft,
+	ObjRight,
+	ObjUp,
+	ObjDown,
 }
 
 pub struct KeyEventHandler {
@@ -55,6 +61,22 @@ impl KeyEventHandler {
 				Movement::Right => movement_vector[0] += 1.0,
 				Movement::Up => movement_vector[1] += 1.0,
 				Movement::Down => movement_vector[1] -= 1.0,
+				_ => (),
+			}
+		}
+		movement_vector
+	}
+
+	pub fn get_obj_movement_vector(&self) -> Vector<f32> {
+		let mut movement_vector = Vector::from(&[0.0, 0.0, 0.0]);
+		for movement in &self.movement {
+			match movement {
+				Movement::ObjForward => movement_vector[2] += 1.0,
+				Movement::ObjBackward => movement_vector[2] -= 1.0,
+				Movement::ObjLeft => movement_vector[0] -= 1.0,
+				Movement::ObjRight => movement_vector[0] += 1.0,
+				Movement::ObjUp => movement_vector[1] += 1.0,
+				Movement::ObjDown => movement_vector[1] -= 1.0,
 				_ => (),
 			}
 		}

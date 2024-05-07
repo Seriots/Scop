@@ -69,14 +69,14 @@ impl Drawing {
             &[1.0, 0.0, 0.0, 0.0],
             &[0.0, 1.0, 0.0, 0.0],
             &[0.0, 0.0, 1.0, 0.0],
-            &[0.0, 0.0, 0.0, 1.0f32], // <- Translation of teapot here
+            &[data.object_position.0, data.object_position.1, data.object_position.2, 1.0f32], // <- Translation of teapot here
         ]);
 
         let rotation_model = Matrix::from(&[
             &[self.t.cos(), 0.0, -self.t.sin(), 0.0],
             &[0.0, 1.0, 0.0, 0.0],
             &[self.t.sin(), 0.0, self.t.cos(), 0.0],
-            &[0.0, 0.0, 0.0, 1.0f32],
+            &[10.5, 20.0, 0.0, 1.0f32],
         ]);
 
         let model = rotation_model * size_model;
