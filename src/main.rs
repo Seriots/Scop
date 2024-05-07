@@ -24,7 +24,9 @@ fn main() {
 
     let mut data = Data::new((window_handler.window.inner_size().width as f32, window_handler.window.inner_size().height as f32));
     
-    let obj = Object::new(teapot::VERTICES.to_vec(), teapot::NORMALS.to_vec(), teapot::INDICES.to_vec());
+    //let obj = Object::new(teapot::VERTICES.to_vec(), teapot::NORMALS.to_vec(), teapot::INDICES.to_vec());
+    let obj = Object::from_path("resources/teapot2.obj");
+    
     let mut drawing_object = Drawing::new();
     drawing_object.compute_program(&window_handler.display, &String::from("src/shaders/shader.vert"), &String::from("src/shaders/shader.frag"));
 

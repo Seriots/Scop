@@ -66,9 +66,9 @@ impl Drawing {
         let view = self.view_matrix(&data.camera.position, &data.camera.direction, &data.camera.up);
 
         let size_model = Matrix::from(&[
-            &[0.01, 0.0, 0.0, 0.0],
-            &[0.0, 0.01, 0.0, 0.0],
-            &[0.0, 0.0, 0.01, 0.0],
+            &[1.0, 0.0, 0.0, 0.0],
+            &[0.0, 1.0, 0.0, 0.0],
+            &[0.0, 0.0, 1.0, 0.0],
             &[0.0, 0.0, 0.0, 1.0f32], // <- Translation of teapot here
         ]);
 
