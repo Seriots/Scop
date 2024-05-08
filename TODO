@@ -1,7 +1,7 @@
 [x] Parser .obj
-[ ] Handle color of each triangle
+[x] Handle color of each triangle
 [ ] Handle texture
 [ ] Handle smooth transition
 [ ] Handle all material effect
 [ ] Manage error
-[ ] Fix rotation 42 by translate all vertex point from 0 - 1 to -1 - 1
+[x] Fix rotation 42 by translate all vertex point from 0 - 1 to -1 - 1

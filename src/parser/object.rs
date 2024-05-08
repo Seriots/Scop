@@ -93,6 +93,25 @@ impl Object {
         self.materials = Material::load_materials(&path)
     }
 
+    pub fn center_object(&mut self) -> Self {
+        let mut min = (f32::MAX, f32::MAX, f32::MAX);
+        let mut max = (f32::MIN, f32::MIN, f32::MIN);
+        for vertex in &self.vertices {
+            min.0 = min.0.min(vertex.position.0);
+            min.1 = min.1.min(vertex.position.1);
+            min.2 = min.2.min(vertex.position.2);
+            max.0 = max.0.max(vertex.position.0);
+            max.1 = max.1.max(vertex.position.1);
+            max.2 = max.2.max(vertex.position.2);
+        }
+        let center = ((max.0 + min.0) / 2.0, (max.1 + min.1) / 2.0, (max.2 + min.2) / 2.0);
+        for vertex in &mut self.vertices {
+            vertex.position.0 -= center.0;
+            vertex.position.1 -= center.1;
+            vertex.position.2 -= center.2;
+        }
+        self.clone()
+    }
 
     pub fn from_path(path: &str) -> Self {
         println!("Loading {}", path);
