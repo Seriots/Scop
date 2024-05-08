@@ -3,7 +3,7 @@ use std::fs;
 
 use glium::implement_vertex;
 
-use crate::Material;
+use crate::{get_index_by_name, Material};
 
 #[derive(Copy, Clone)]
 pub struct Vertex {
@@ -28,7 +28,7 @@ pub struct Object {
     pub indices: Vec<u16>,
     pub material_path: String,
     pub materials: Vec<Material>,
-    pub link_material: Vec<String>,
+    pub link_material: Vec<usize>,
     pub color: Vec<Vertex>,
 }
 
@@ -65,7 +65,7 @@ impl Object {
         self.normals.push(Normal { normal: (x, y, z) })
     }
 
-    fn parse_triangle(&mut self, line: &str, mat_to_use: &str) {
+    fn parse_triangle(&mut self, line: &str, mat_to_use: usize) {
         let mut iter = line.split_whitespace();
         iter.next();
         let first = iter.next().unwrap().parse::<u16>().unwrap();
@@ -75,7 +75,7 @@ impl Object {
             self.indices.push(first - 1);
             self.indices.push(second - 1);
             self.indices.push(third - 1);
-            self.link_material.push(mat_to_use.to_string());
+            self.link_material.push(mat_to_use);
 
             second = third;
         }
@@ -117,7 +117,7 @@ impl Object {
         println!("Loading {}", path);
         let mut obj = Self::default();
 
-        let mut mat_to_use = String::from("default");
+        let mut mat_to_use: usize = 0;
         let obj_file = fs::read_to_string(path).expect("Unable to read file");
 
         for line in obj_file.lines() {
@@ -130,7 +130,7 @@ impl Object {
                         obj.parse_normal(line);
                     },
                     "f" => {
-                        obj.parse_triangle(line, &mat_to_use);
+                        obj.parse_triangle(line, mat_to_use);
                     },
                     "mtllib" => {
                         obj.load_material(line, path)
@@ -139,7 +139,7 @@ impl Object {
                         obj.name = line.split_whitespace().nth(1).unwrap().to_string();
                     },
                     "usemtl" => {
-                        mat_to_use = line.split_whitespace().nth(1).unwrap().to_string();
+                        mat_to_use = get_index_by_name(&obj.materials, &line.split_whitespace().nth(1).unwrap().to_string());
                     }
                     _ => {}
                 }

@@ -1,4 +1,6 @@
-use std::fs;
+use std::{fs, iter::Enumerate};
+
+use glium::index;
 
 #[derive(Clone, Default)]
 pub struct Material {
@@ -84,11 +86,11 @@ impl Material {
     }
 }
 
-pub fn get_by_name(mat_vec: Vec<Material>, name: &String) -> Option<Material> {
-    for elem in mat_vec {
+pub fn get_index_by_name(mat_vec: &Vec<Material>, name: &String) -> usize {
+    for (i, elem) in mat_vec.iter().enumerate() {
         if &elem.name == name {
-            return Some(elem)
+            return i
         }
     }
-    return None
+    return 0
 }
