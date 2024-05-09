@@ -25,7 +25,8 @@ fn main() {
     let mut data = Data::new((window_handler.window.inner_size().width as f32, window_handler.window.inner_size().height as f32));
     
     //let obj = Object::new(teapot::VERTICES.to_vec(), teapot::NORMALS.to_vec(), teapot::INDICES.to_vec());
-    let obj = Object::from_path("resources/42.obj").center_object();
+    let obj = Object::from_path("resources/teapot2.obj");
+    // let obj = Object::from_path("resources/42.obj").center_object();
     
     let mut drawing_object = Drawing::new();
     drawing_object.compute_program(&window_handler.display, &String::from("src/shaders/shader.vert"), &String::from("src/shaders/shader.frag"));
@@ -44,6 +45,7 @@ fn main() {
                     data.update_object_position(data.key_event_handler.get_obj_movement_vector(), 0.01);
                     let fps = fps_handler.display_fps(false);
                     data.camera.move_from_vector3(movement, 1.0 / fps);
+                    data.update_transition_percent(1.0 / fps, 5.0);
                     drawing_object.draw(&window_handler.display, &obj, &data, &fps_handler.delta_time);
                 },
                 winit::event::WindowEvent::Resized(window_size) => {
@@ -66,6 +68,7 @@ fn main() {
                             PhysicalKey::Code(KeyCode::ControlRight) => data.key_event_handler.start_event(window::Movement::ObjDown),
                             PhysicalKey::Code(KeyCode::ShiftRight) => data.key_event_handler.start_event(window::Movement::ObjUp),
                             PhysicalKey::Code(KeyCode::Escape) => window_handler.unlock_cursor(&mut data),
+                            PhysicalKey::Code(KeyCode::KeyC) => data.update_color_mode(),
                             
                             _ =>  (),
                         },

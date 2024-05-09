@@ -52,6 +52,13 @@ impl<K: Clone + Default + NumberUtils + Fma> Vector<K> {
         }
         return Matrix::from_vec(matrix)
     }
+
+    pub fn to_list_3(&self) -> [K; 3] {
+        if self.size() != 3 {
+            panic!("Size must be 3")
+        }
+        return [self[0].clone(), self[1].clone(), self[2].clone()];
+    }
 }
 
 

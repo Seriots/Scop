@@ -2,7 +2,7 @@ use std::{fs, iter::Enumerate};
 
 use glium::index;
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Debug)]
 pub struct Material {
     pub name: String,
     pub specular_coef: f32,
@@ -81,6 +81,7 @@ impl Material {
             }
             //let key = line.split_whitespace().next().unwrap();
         }
+        new.push(current_material);
         new
         
     }

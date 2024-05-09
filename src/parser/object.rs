@@ -29,7 +29,6 @@ pub struct Object {
     pub material_path: String,
     pub materials: Vec<Material>,
     pub link_material: Vec<usize>,
-    pub color: Vec<Vertex>,
 }
 
 impl Object {
@@ -42,7 +41,6 @@ impl Object {
                 material_path: String::default(),
                 materials: Default::default(),
                 link_material: Default::default(),
-                color: Default::default()
             }
     }
 
@@ -125,9 +123,9 @@ impl Object {
                 match key {
                     "v" => {
                         obj.parse_vertex(line);
+                        obj.parse_normal(line);
                     },
                     "vn" => {
-                        obj.parse_normal(line);
                     },
                     "f" => {
                         obj.parse_triangle(line, mat_to_use);
@@ -144,7 +142,9 @@ impl Object {
                     _ => {}
                 }
             }
-            //let key = line.split_whitespace().next().unwrap();
+        }
+        if obj.materials.len() == 0 {
+            obj.materials.push(Material::default());
         }
         obj        
     }

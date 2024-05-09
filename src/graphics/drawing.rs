@@ -104,18 +104,32 @@ impl Drawing {
 
         let positions = glium::VertexBuffer::new(display, &obj.vertices).unwrap();
         let normals = glium::VertexBuffer::new(display, &obj.normals).unwrap();
-        let colors = glium::VertexBuffer::new(display, &obj.color).unwrap();
         let indices = glium::IndexBuffer::new(
             display,
             glium::index::PrimitiveType::TrianglesList,
             &obj.indices,
         ).unwrap();
-    
+
+
         frame.draw(
-                (&positions, &normals, &colors),
+                (&positions, &normals),
                 &indices,
                 &self.program.as_ref().unwrap(),
-                &uniform! {model: model.to_list_4(), u_light: light, perspective: perspective.to_list_4(), view: view.to_list_4()},
+                &uniform! {
+                            model: model.to_list_4(),
+                            perspective: perspective.to_list_4(),
+                            view: view.to_list_4(),
+                            u_light: light,
+                            u_ambient_color: obj.materials[0].ambient_color,
+                            u_diffuse_color: obj.materials[0].diffuse_color,
+                            u_specular_color: obj.materials[0].specular_color,
+                            u_emissive_color: obj.materials[0].emissive_color,
+                            u_specular_coef: obj.materials[0].specular_coef,
+                            u_alpha: obj.materials[0].alpha,
+                            u_refraction: obj.materials[0].refraction,
+                            u_mode: data.color_mode as i32,
+                            u_transition_percent: data.transition_percent,
+                        },
                 &params,
             )
             .unwrap();
