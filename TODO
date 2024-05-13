@@ -1,6 +1,6 @@
 [x] Parser .obj
 [x] Handle color of each triangle
-[ ] Handle texture
+[x] Handle texture
 [x] Handle smooth transition
 [x] Handle all material effect
 [ ] Manage error
