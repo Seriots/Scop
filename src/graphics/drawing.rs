@@ -98,6 +98,7 @@ impl Drawing {
                 write: true,
                 .. Default::default()
             },
+            // backface_culling: glium::draw_parameters::BackfaceCullingMode::CullCounterClockwise,
             blend: glium::draw_parameters::Blend::alpha_blending(),
             ..Default::default()
         };

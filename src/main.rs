@@ -9,14 +9,17 @@ mod graphics;
 mod matrix;
 
 
-use crate::{matrix::Vector, window::WindowHandler};
+use std::env;
+
+use crate::window::WindowHandler;
 use parser::*;
 use data::*;
 use graphics::*;
 use winit::keyboard::{KeyCode, PhysicalKey};
 
 fn main() {
-    
+    let args: Vec<String> = env::args().collect();
+
     let event_loop = winit::event_loop::EventLoopBuilder::new()
     .build()
     .expect("event loop building");
@@ -30,8 +33,10 @@ fn main() {
     let mut data = Data::new((window_handler.window.inner_size().width as f32, window_handler.window.inner_size().height as f32),
                             glium::texture::Texture2d::new(&window_handler.display, image).unwrap());
     
-    let obj = Object::from_path("resources/teapot2.obj");
-    //let obj = Object::from_path("resources/42.obj").center_object();
+    data.load_objects(args[1..].to_vec());
+
+    // let obj = Object::from_path("resources/teapot2.obj");
+    // //let obj = Object::from_path("resources/42.obj").center_object();
     
     let mut drawing_object = Drawing::new();
     drawing_object.compute_program(&window_handler.display, &String::from("src/shaders/shader.vert"), &String::from("src/shaders/shader.frag"));
@@ -51,7 +56,7 @@ fn main() {
                     let fps = fps_handler.display_fps(false);
                     data.camera.move_from_vector3(movement, 1.0 / fps);
                     data.update_transition_percent(1.0 / fps, 5.0);
-                    drawing_object.draw(&window_handler.display, &obj, &data, &fps_handler.delta_time);
+                    drawing_object.draw(&window_handler.display, &data.all_objects[data.selected_object], &data, &fps_handler.delta_time);
                 },
                 winit::event::WindowEvent::Resized(window_size) => {
                     window_handler.display.resize(window_size.into());
@@ -74,6 +79,7 @@ fn main() {
                             PhysicalKey::Code(KeyCode::ShiftRight) => data.key_event_handler.start_event(window::Movement::ObjUp),
                             PhysicalKey::Code(KeyCode::Escape) => window_handler.unlock_cursor(&mut data),
                             PhysicalKey::Code(KeyCode::KeyC) => data.update_color_mode(),
+                            PhysicalKey::Code(KeyCode::KeyV) => data.switch_object(),
                             
                             _ =>  (),
                         },
