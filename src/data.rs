@@ -19,6 +19,7 @@ pub struct Data {
     pub color_mode: u16,
     pub transition_percent: f32,
     pub texture: Texture2d,
+    pub allow_rotation: bool,
 }
 
 impl Data {
@@ -35,6 +36,7 @@ impl Data {
                 color_mode: 0,
                 transition_percent: 1.0,
                 texture,
+                allow_rotation: false,
             }
     }
 
@@ -64,6 +66,10 @@ impl Data {
 
     pub fn switch_object(&mut self) {
         self.selected_object = (self.selected_object + 1) % self.all_objects.len();
+    }
+
+    pub fn toggle_rotation(&mut self) {
+        self.allow_rotation = !self.allow_rotation;
     }
 
     pub fn load_objects(&mut self, args: Vec<String>) {

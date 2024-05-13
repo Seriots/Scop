@@ -80,6 +80,7 @@ fn main() {
                             PhysicalKey::Code(KeyCode::Escape) => window_handler.unlock_cursor(&mut data),
                             PhysicalKey::Code(KeyCode::KeyC) => data.update_color_mode(),
                             PhysicalKey::Code(KeyCode::KeyV) => data.switch_object(),
+                            PhysicalKey::Code(KeyCode::KeyB) => data.toggle_rotation(),
                             
                             _ =>  (),
                         },

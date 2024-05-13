@@ -1,8 +1,5 @@
 #![allow(dead_code)]
 
-
-use std::vec;
-
 use crate::{matrix::{core::Vector, linear_combination}, Quaternion};
 
 pub struct Camera {
@@ -14,11 +11,13 @@ pub struct Camera {
 
 impl Camera {
     pub fn new() -> Self {
+        let direction = Vector::from(&[1.0, 0.0, 0.0]);
+        let rotation = direction.scl_new(90.0);
         Self {
-            position: Vector::from(&[0.0, 0.0, -2.0f32]),
-            direction: Vector::from(&[0.0, 0.0, 1.0]), 
+            position: Vector::from(&[-5.0, 0.0, 0.0f32]),
+            direction,
             up: Vector::from(&[0.0, 1.0, 0.0]),
-            rotation: Vector::from(&[0.0, 0.0, 90.0]),
+            rotation,
         }
     }
 
@@ -32,9 +31,6 @@ impl Camera {
     pub fn rotate_from_vector3(&mut self, vector: Vector<f32>, speed: f32) {
 
         self.rotation = linear_combination(&[self.rotation.clone(), vector], &[1.0, speed]);
-        // let mut rotation = vector.clone();
-        // rotation.scl(speed);
-        // println!("{:?}", self.rotation);
 
         // self.rotation.add(&rotation);
         self.rotation[1] = self.rotation[1].clamp(-89.9, 89.9);

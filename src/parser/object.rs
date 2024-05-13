@@ -3,7 +3,7 @@ use std::fs;
 
 use glium::implement_vertex;
 
-use crate::{get_index_by_name, Material};
+use crate::{get_index_by_name, matrix::Vector, Material};
 
 #[derive(Copy, Clone)]
 pub struct Vertex {
@@ -21,11 +21,19 @@ pub struct Normal {
 
 implement_vertex!(Normal, normal);
 
+#[derive(Copy, Clone)]
+pub struct Face {
+    pub face: u16
+}
+
+implement_vertex!(Face, face);
+
 #[derive(Default, Clone)]
 pub struct Object {
     pub name: String,
     pub vertices: Vec<Vertex>,
     pub normals: Vec<Normal>,
+    pub triangle_normals: Vec<Face>,
     pub indices: Vec<u16>,
     pub material_path: String,
     pub materials: Vec<Material>,
@@ -33,18 +41,6 @@ pub struct Object {
 }
 
 impl Object {
-    pub fn new(vertices: Vec<Vertex>, normals: Vec<Normal>, indices: Vec<u16>) -> Self {
-        Self {
-                name: String::default(),
-                vertices,
-                normals,
-                indices,
-                material_path: String::default(),
-                materials: Default::default(),
-                link_material: Default::default(),
-            }
-    }
-
     fn parse_vertex(&mut self, line: &str) {
         let mut iter = line.split_whitespace();
         iter.next();
@@ -112,6 +108,33 @@ impl Object {
         self.clone()
     }
 
+    pub fn load_triangle_normal(&mut self) {
+        for i in 0..self.indices.len() / 3 {
+            let index = i * 3;
+            let first = self.vertices[self.indices[index] as usize].position;
+            let second = self.vertices[self.indices[index + 1] as usize].position;
+            let third = self.vertices[self.indices[index + 2] as usize].position;
+            let normal = Vector::cross_product(&Vector::from(&[second.0 - first.0, second.1 - first.1, second.2 - first.2]),
+                                               &Vector::from(&[third.0 - first.0, third.1 - first.1, third.2 - first.2]));
+            let normal = normal.rnormalize();
+            // self.normals.push(Normal { normal: (normal[0], normal[1], normal[2]) });
+            // self.normals.push(Normal { normal: (normal[0], normal[1], normal[2]) });
+            // self.normals.push(Normal { normal: (normal[0], normal[1], normal[2]) });
+
+            // let face1 = Vector::cross_product(&normal, &Vector::from(&[1.0, 0.0, 0.0f32])).norm();
+            // let face2 = Vector::cross_product(&normal, &Vector::from(&[0.0, 1.0, 0.0f32])).norm();
+            // let face3 = Vector::cross_product(&normal, &Vector::from(&[0.0, 0.0, 1.0f32])).norm();
+
+            // if face1 > face2 && face1 > face3 {
+            //     self.triangle_normals.push(Face {face: 0});
+            // } else if face2 > face1 && face2 > face3 {
+            //     self.triangle_normals.push(Face {face: 1});
+            // } else {
+            //     self.triangle_normals.push(Face {face: 2});
+            // }
+        }
+    }
+
     pub fn from_path(path: &str) -> Self {
         println!("Loading {}", path);
         let mut obj = Self::default();
@@ -124,9 +147,9 @@ impl Object {
                 match key {
                     "v" => {
                         obj.parse_vertex(line);
-                        obj.parse_normal(line);
                     },
                     "vn" => {
+                        obj.parse_normal(line);
                     },
                     "f" => {
                         obj.parse_triangle(line, mat_to_use);
@@ -147,6 +170,12 @@ impl Object {
         if obj.materials.len() == 0 {
             obj.materials.push(Material::default());
         }
+        // if obj.normals.len() == 0 {
+        //     obj.normals = obj.vertices.iter().map(|vert| Normal { normal: vert.position }).collect();
+        // }
+
+        obj.load_triangle_normal();
+
         obj        
     }
 }

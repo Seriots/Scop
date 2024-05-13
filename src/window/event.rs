@@ -2,7 +2,7 @@ use winit::dpi::PhysicalPosition;
 
 use crate::{matrix::Vector, Camera};
 
-
+#[allow(dead_code)]
 #[derive(PartialEq)]
 pub enum Movement {
 	Forward,

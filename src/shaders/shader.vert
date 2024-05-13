@@ -7,10 +7,10 @@ in vec3 color;
 in vec3 tex_coords;
 
 out vec3 v_normal;
+out vec3 v_base_normal;
 out vec3 v_position;
 out vec3 v_color;
 out vec3 v_tex_coords;
-out vec3 v_base_normal;
 
 uniform mat4 perspective;
 uniform mat4 view;

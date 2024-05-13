@@ -55,7 +55,10 @@ impl Drawing {
     }
 
     pub fn draw(&mut self, display: &Display<WindowSurface>, obj: &Object, data: &Data, delta_t: &f32) {
-        self.t += delta_t;
+
+        if data.allow_rotation {
+            self.t += delta_t;
+        }
         
         let mut frame = display.draw();
 
@@ -110,7 +113,6 @@ impl Drawing {
             glium::index::PrimitiveType::TrianglesList,
             &obj.indices,
         ).unwrap();
-
 
         frame.draw(
                 (&positions, &normals),

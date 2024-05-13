@@ -3,5 +3,4 @@
 [x] Handle texture
 [x] Handle smooth transition
 [x] Handle all material effect
-[ ] Manage error
 [x] Fix rotation 42 by translate all vertex point from 0 - 1 to -1 - 1

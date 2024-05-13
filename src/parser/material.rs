@@ -1,6 +1,5 @@
-use std::{fs, iter::Enumerate};
+use std::fs;
 
-use glium::index;
 
 #[derive(Clone, Default, Debug)]
 pub struct Material {
