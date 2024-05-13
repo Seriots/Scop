@@ -121,17 +121,17 @@ impl Object {
             // self.normals.push(Normal { normal: (normal[0], normal[1], normal[2]) });
             // self.normals.push(Normal { normal: (normal[0], normal[1], normal[2]) });
 
-            // let face1 = Vector::cross_product(&normal, &Vector::from(&[1.0, 0.0, 0.0f32])).norm();
-            // let face2 = Vector::cross_product(&normal, &Vector::from(&[0.0, 1.0, 0.0f32])).norm();
-            // let face3 = Vector::cross_product(&normal, &Vector::from(&[0.0, 0.0, 1.0f32])).norm();
+            let face1 = Vector::cross_product(&normal, &Vector::from(&[1.0, 0.0, 0.0f32])).norm();
+            let face2 = Vector::cross_product(&normal, &Vector::from(&[0.0, 1.0, 0.0f32])).norm();
+            let face3 = Vector::cross_product(&normal, &Vector::from(&[0.0, 0.0, 1.0f32])).norm();
 
-            // if face1 > face2 && face1 > face3 {
-            //     self.triangle_normals.push(Face {face: 0});
-            // } else if face2 > face1 && face2 > face3 {
-            //     self.triangle_normals.push(Face {face: 1});
-            // } else {
-            //     self.triangle_normals.push(Face {face: 2});
-            // }
+            if face1 > face2 && face1 > face3 {
+                self.triangle_normals.push(Face {face: 0});
+            } else if face2 > face1 && face2 > face3 {
+                self.triangle_normals.push(Face {face: 1});
+            } else {
+                self.triangle_normals.push(Face {face: 2});
+            }
         }
     }
 
@@ -170,11 +170,11 @@ impl Object {
         if obj.materials.len() == 0 {
             obj.materials.push(Material::default());
         }
-        // if obj.normals.len() == 0 {
-        //     obj.normals = obj.vertices.iter().map(|vert| Normal { normal: vert.position }).collect();
-        // }
+        if obj.normals.len() == 0 {
+            obj.normals = obj.vertices.iter().map(|vert| Normal { normal: vert.position }).collect();
+        }
 
-        obj.load_triangle_normal();
+        // obj.load_triangle_normal();
 
         obj        
     }

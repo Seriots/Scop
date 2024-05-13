@@ -27,9 +27,6 @@ uniform sampler2D u_texture;
 const int nb_colors = 5;
 const vec3 colors[nb_colors] = vec3[](vec3(1.0, 1.0, 1.0), vec3(0.6, 0.6, 0.6), vec3(0.0, 0.0, 0.0), vec3(0.8, 0.8, 0.8), vec3(0.4, 0.4, 0.4));
 
-// const vec3 ambient_color = vec3(0.0, 0.0, 0.0);
-// const vec3 diffuse_color = vec3(0.64, 0.64, 0.64);
-// const vec3 specular_color = vec3(0.5, 0.5, 0.5);
 
 void main() {
     vec3 base_color = u_ambient_color;
@@ -42,18 +39,8 @@ void main() {
     float face2 = abs(length(cross(v_base_normal, vec3(0.0, 1.0, 0.0))));
     float face3 = abs(length(cross(v_base_normal, vec3(1.0, 0.0, 0.0))));
 
-    vec2 calc_text_coords;
-    if (face1 < face2 && face1 < face3) {
-        calc_text_coords = vec2(v_tex_coords.x, v_tex_coords.y); // <- z face
-    } else if (face2 < face1 && face2 < face3) {
-        calc_text_coords = vec2(v_tex_coords.z, v_tex_coords.x); // <- z face
-    } else {
-        calc_text_coords = vec2(v_tex_coords.z, v_tex_coords.y); // <- Y FACE
-    }
 
-    // vec2 calc_text_coords = vec2(v_tex_coords.x, v_tex_coords.y); // <- z face
-    // vec2 calc_text_coords = vec2(v_tex_coords.z, v_tex_coords.x); // <- Y FACE
-
+    vec2 calc_text_coords = vec2((v_tex_coords.x + v_tex_coords.z), v_tex_coords.y); // <- Y FACE
 
     if (u_mode == 1) {
         vec3 base_color = u_ambient_color * (1.0 - u_transition_percent) + colors[gl_PrimitiveID % nb_colors] * u_transition_percent; 
