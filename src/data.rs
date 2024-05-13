@@ -2,6 +2,8 @@
 
 use std::time::Instant;
 
+use glium::Texture2d;
+
 use crate::{matrix::Vector, window::KeyEventHandler, Camera};
 
 
@@ -14,10 +16,11 @@ pub struct Data {
     pub object_position: (f32, f32, f32),
     pub color_mode: u16,
     pub transition_percent: f32,
+    pub texture: Texture2d,
 }
 
 impl Data {
-    pub fn new(window_extent: (f32, f32)) -> Self {
+    pub fn new(window_extent: (f32, f32), texture: Texture2d) -> Self {
         Self {
                 start_time: Instant::now(),
                 camera: Camera::new(),
@@ -27,6 +30,7 @@ impl Data {
                 object_position: (0.0, 0.0, 0.0),
                 color_mode: 0,
                 transition_percent: 1.0,
+                texture,
             }
     }
 
@@ -41,7 +45,7 @@ impl Data {
 
     pub fn update_color_mode(&mut self) {
         self.transition_percent = 0.0;
-        self.color_mode = (self.color_mode + 1) % 2;
+        self.color_mode = (self.color_mode + 1) % 3;
     }
 
     pub fn update_transition_percent(&mut self, delta_time: f32, speed: f32) {

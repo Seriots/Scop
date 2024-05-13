@@ -129,6 +129,7 @@ impl Drawing {
                             u_refraction: obj.materials[0].refraction,
                             u_mode: data.color_mode as i32,
                             u_transition_percent: data.transition_percent,
+                            u_texture: &data.texture,
                         },
                 &params,
             )

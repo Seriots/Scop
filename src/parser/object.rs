@@ -8,10 +8,11 @@ use crate::{get_index_by_name, Material};
 #[derive(Copy, Clone)]
 pub struct Vertex {
     pub position: (f32, f32, f32),
-    pub color: (f32, f32, f32)
+    pub color: (f32, f32, f32),
+    pub tex_coords: (f32, f32),
 }
 
-implement_vertex!(Vertex, position, color);
+implement_vertex!(Vertex, position, color, tex_coords);
 
 #[derive(Copy, Clone)]
 pub struct Normal {
@@ -51,7 +52,7 @@ impl Object {
         let y = iter.next().unwrap().parse::<f32>().unwrap();
         let z = iter.next().unwrap().parse::<f32>().unwrap();
         let random_value = rand::random::<f32>();
-        self.vertices.push(Vertex { position: (x, y, z), color: (random_value, random_value, random_value)})
+        self.vertices.push(Vertex { position: (x, y, z), color: (random_value, random_value, random_value), tex_coords: (z, y)})
     }
 
     fn parse_normal(&mut self, line: &str) {
