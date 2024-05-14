@@ -2,7 +2,6 @@ extern crate glium;
 extern crate winit;
 
 mod window;
-mod teapot;
 mod parser;
 mod data;
 mod graphics;
@@ -51,7 +50,7 @@ fn main() {
                     let movement = data.key_event_handler.get_movement_vector();
                     data.update_object_position(data.key_event_handler.get_obj_movement_vector(), 0.01);
                     let fps = fps_handler.display_fps(false);
-                    data.camera.move_from_vector3(movement, 1.0 / fps);
+                    data.camera.move_from_vector3(movement, 1.0 / fps * 5.0);
                     data.update_transition_percent(1.0 / fps, 5.0);
                     drawing_object.draw(&window_handler.display, &data.all_objects[data.selected_object], &data, &fps_handler.delta_time);
                 },

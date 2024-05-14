@@ -46,7 +46,9 @@ impl Data {
     }
 
     pub fn update_object_position(&mut self, position: Vector<f32>, speed: f32) {
-        self.object_position = (self.object_position.0 + position[0] * speed, self.object_position.1 + position[1] * speed, self.object_position.2 + position[2] * speed);
+        self.object_position = (self.object_position.0 + position[0] * speed,
+                                self.object_position.1 + position[1] * speed,
+                                self.object_position.2 + position[2] * speed);
     }
 
     pub fn update_color_mode(&mut self) {

@@ -93,7 +93,7 @@ impl Object {
         let mut iter = line.split_whitespace();
         iter.next();
         let file = iter.next().unwrap().to_string();
-        let mut base_path = path.split("/").collect::<Vec<&str>>();
+        let mut base_path = path.split(|c| c == '/' || c == '\\').collect::<Vec<&str>>();
         base_path.pop();
         base_path.push(&file);
         let path = base_path.join("/");
@@ -118,8 +118,8 @@ impl Object {
             vertex.position.1 -= center.1;
             vertex.position.2 -= center.2;
 
-
-            vertex.tex_coords = (vertex.position.0, vertex.position.1, vertex.position.2);
+            let v = Vector::from(&[vertex.position.0, vertex.position.1, vertex.position.2]);
+            vertex.tex_coords =  (v[0], v[1], v[2]);
 
         }
 

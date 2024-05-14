@@ -1,7 +1,7 @@
 # Blender 3.6.5
 # www.blender.org
 o obj1
-mtllib resources/ferris.mtl
+mtllib ferris.mtl
 v 0.029367 0.312539 0.118718
 v 0.050853 0.319647 0.099053
 v 0.028199 0.325386 0.103543
