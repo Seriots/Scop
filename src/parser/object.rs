@@ -48,7 +48,7 @@ impl Object {
         let y = iter.next().unwrap().parse::<f32>().unwrap();
         let z = iter.next().unwrap().parse::<f32>().unwrap();
         let random_value = rand::random::<f32>();
-        self.vertices.push(Vertex { position: (x, y, z), color: (random_value, random_value, random_value), tex_coords: (x, y ,z)})
+        self.vertices.push(Vertex { position: (x, y, z), color: (random_value, random_value, random_value), tex_coords: (x, y, z)})
     }
 
     fn parse_normal(&mut self, line: &str) {
@@ -60,13 +60,25 @@ impl Object {
         self.normals.push(Normal { normal: (x, y, z) })
     }
 
+    fn parse_texture(&mut self, line: &str, index: usize) {
+        let mut iter = line.split_whitespace();
+        iter.next();
+        let x = iter.next().unwrap().parse::<f32>().unwrap();
+        let y = iter.next().unwrap().parse::<f32>().unwrap();
+        if let Some(z) = iter.next() {
+            self.vertices[index].tex_coords = (x, y, z.parse::<f32>().unwrap());
+        } else {
+            self.vertices[index].tex_coords = (x, y, 0.0);
+        }
+    }
+
     fn parse_triangle(&mut self, line: &str, mat_to_use: usize) {
         let mut iter = line.split_whitespace();
         iter.next();
-        let first = iter.next().unwrap().parse::<u16>().unwrap();
-        let mut second = iter.next().unwrap().parse::<u16>().unwrap();
+        let first = iter.next().unwrap().split("/").collect::<Vec::<_> >()[0].parse::<u16>().unwrap();
+        let mut second = iter.next().unwrap().split("/").collect::<Vec::<_> >()[0].parse::<u16>().unwrap();
         for it in iter {
-            let third = it.parse::<u16>().unwrap();
+            let third = it.split("/").collect::<Vec::<_> >()[0].parse::<u16>().unwrap();
             self.indices.push(first - 1);
             self.indices.push(second - 1);
             self.indices.push(third - 1);
@@ -138,6 +150,7 @@ impl Object {
     pub fn from_path(path: &str) -> Self {
         println!("Loading {}", path);
         let mut obj = Self::default();
+        let mut texture_count: usize = 0;
 
         let mut mat_to_use: usize = 0;
         let obj_file = fs::read_to_string(path).expect("Unable to read file");
@@ -150,6 +163,10 @@ impl Object {
                     },
                     "vn" => {
                         obj.parse_normal(line);
+                    },
+                    "vt" => {
+                        obj.parse_texture(line, texture_count);
+                        texture_count += 1;
                     },
                     "f" => {
                         obj.parse_triangle(line, mat_to_use);

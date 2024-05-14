@@ -15,10 +15,19 @@ pub struct Material {
 }
 
 impl Material {
+    fn basics() -> Self {
+        Self {
+            alpha: 1.0,
+            ambient_color: [0.0, 0.0, 0.0],
+            specular_coef: 0.4,
+            ..Default::default()
+        }
+    } 
+
     pub fn load_materials(path: &str) -> Vec<Material> {
         let mut new: Vec<Material> = Vec::new();
         let material_file = fs::read_to_string(path).unwrap();
-        let mut current_material = Self::default();
+        let mut current_material = Self::basics();
         let mut first = true;
 
         for line in material_file.lines() {
