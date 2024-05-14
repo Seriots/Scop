@@ -137,9 +137,6 @@ impl Object {
             let normal = Vector::cross_product(&Vector::from(&[second.0 - first.0, second.1 - first.1, second.2 - first.2]),
                                                &Vector::from(&[third.0 - first.0, third.1 - first.1, third.2 - first.2]));
             let normal = normal.rnormalize();
-            // self.normals.push(Normal { normal: (normal[0], normal[1], normal[2]) });
-            // self.normals.push(Normal { normal: (normal[0], normal[1], normal[2]) });
-            // self.normals.push(Normal { normal: (normal[0], normal[1], normal[2]) });
 
             let face1 = Vector::cross_product(&normal, &Vector::from(&[1.0, 0.0, 0.0f32])).norm();
             let face2 = Vector::cross_product(&normal, &Vector::from(&[0.0, 1.0, 0.0f32])).norm();
@@ -198,8 +195,6 @@ impl Object {
         if obj.normals.len() == 0 {
             obj.normals = obj.vertices.iter().map(|vert| Normal { normal: vert.position }).collect();
         }
-
-        // obj.load_triangle_normal();
 
         obj        
     }

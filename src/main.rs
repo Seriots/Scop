@@ -35,9 +35,6 @@ fn main() {
     
     data.load_objects(args[1..].to_vec());
 
-    // let obj = Object::from_path("resources/teapot2.obj");
-    // //let obj = Object::from_path("resources/42.obj").center_object();
-    
     let mut drawing_object = Drawing::new();
     drawing_object.compute_program(&window_handler.display, &String::from("src/shaders/shader.vert"), &String::from("src/shaders/shader.frag"));
 
@@ -128,6 +125,4 @@ fn main() {
             _ => (),
         }
     }).unwrap();
-
-    println!("HEre");
 }
