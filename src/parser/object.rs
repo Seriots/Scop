@@ -48,6 +48,7 @@ impl Object {
         let y = iter.next().unwrap().parse::<f32>().unwrap();
         let z = iter.next().unwrap().parse::<f32>().unwrap();
         let random_value = rand::random::<f32>();
+
         self.vertices.push(Vertex { position: (x, y, z), color: (random_value, random_value, random_value), tex_coords: (x, y, z)})
     }
 
@@ -116,10 +117,17 @@ impl Object {
             vertex.position.0 -= center.0;
             vertex.position.1 -= center.1;
             vertex.position.2 -= center.2;
+
+
+            vertex.tex_coords = (vertex.position.0, vertex.position.1, vertex.position.2);
+
         }
+
+        
         self.clone()
     }
 
+    #[allow(dead_code)]
     pub fn load_triangle_normal(&mut self) {
         for i in 0..self.indices.len() / 3 {
             let index = i * 3;

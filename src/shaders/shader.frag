@@ -40,7 +40,7 @@ void main() {
     float face3 = abs(length(cross(v_base_normal, vec3(1.0, 0.0, 0.0))));
 
 
-    vec2 calc_text_coords = vec2((v_tex_coords.x + v_tex_coords.z), v_tex_coords.y); // <- Y FACE
+    vec2 calc_text_coords = vec2((v_tex_coords.x + v_tex_coords.z), v_tex_coords.x + v_tex_coords.y); // <- Y FACE
 
     if (u_mode == 1) {
         vec3 base_color = u_ambient_color * (1.0 - u_transition_percent) + colors[gl_PrimitiveID % nb_colors] * u_transition_percent; 
