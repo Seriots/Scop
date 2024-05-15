@@ -189,7 +189,7 @@ impl Object {
             }
         }
         if obj.materials.len() == 0 {
-            obj.materials.push(Material::default());
+            obj.materials.push(Material::basics());
         }
         if obj.normals.len() == 0 {
             obj.normals = obj.vertices.iter().map(|vert| Normal { normal: vert.position }).collect();

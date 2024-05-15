@@ -76,7 +76,9 @@ impl Data {
 
     pub fn load_objects(&mut self, args: Vec<String>) {
         if args.len() == 0 {
+            self.all_objects.push(Object::from_path("resources/teapot.obj"));
             self.all_objects.push(Object::from_path("resources/teapot2.obj"));
+            self.all_objects.push(Object::from_path("resources/ferris.obj"));
             self.all_objects.push(Object::from_path("resources/42.obj").center_object());
             return;
         }

@@ -15,11 +15,16 @@ pub struct Material {
 }
 
 impl Material {
-    fn basics() -> Self {
+    pub fn basics() -> Self {
         Self {
             alpha: 1.0,
-            ambient_color: [0.0, 0.0, 0.0],
-            specular_coef: 0.4,
+            ambient_color: [1.0, 0.0, 0.0],
+            specular_coef: 1.4,
+            diffuse_color: [0.64, 0.64, 0.64],
+            specular_color: [0.5, 0.5, 0.5],
+            refraction: 1.0,
+            emissive_color: [0.0, 0.0, 0.0],
+            name: String::from("default"),
             ..Default::default()
         }
     } 
