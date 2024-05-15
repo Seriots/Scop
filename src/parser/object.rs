@@ -47,9 +47,8 @@ impl Object {
         let x = iter.next().unwrap().parse::<f32>().unwrap();
         let y = iter.next().unwrap().parse::<f32>().unwrap();
         let z = iter.next().unwrap().parse::<f32>().unwrap();
-        let random_value = rand::random::<f32>();
 
-        self.vertices.push(Vertex { position: (x, y, z), color: (random_value, random_value, random_value), tex_coords: (x, y, z)})
+        self.vertices.push(Vertex { position: (x, y, z), color: (0.0, 0.0, 0.0), tex_coords: (x, y, z)})
     }
 
     fn parse_normal(&mut self, line: &str) {

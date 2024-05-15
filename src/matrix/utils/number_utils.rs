@@ -3,6 +3,7 @@ pub trait NumberUtils {
 	fn one() -> Self;
 	fn approx_zero(&self) -> bool;
 	fn absolute(&self) -> Self;
+	#[allow(dead_code)]
 	fn power(&self, n: usize) -> Self;
 	fn squarert(&self) -> Self;
 }

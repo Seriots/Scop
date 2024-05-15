@@ -83,6 +83,7 @@ impl KeyEventHandler {
 		movement_vector
 	}
 
+	#[allow(dead_code)]
 	pub fn get_rotation_vector(&self) -> Vector<f32> {
 		let mut rotation_vector = Vector::from(&[0.0, 0.0, 0.0]);
 		for movement in &self.movement {
